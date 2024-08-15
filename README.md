@@ -27,3 +27,39 @@ else
     echo "Updated eks_version to $eks_version"
 fi
 ```
+how to restart deploy
+```bash
+#!/bin/bash
+
+# Define the namespace
+NAMESPACE="kube-system"
+
+# Get all deployments in the specified namespace
+DEPLOYMENTS=$(kubectl get deployments -n $NAMESPACE -o jsonpath='{.items[*].metadata.name}')
+
+# Loop through each deployment and restart it
+for DEPLOYMENT in $DEPLOYMENTS; do
+  echo "Rolling out deployment: $DEPLOYMENT"
+  kubectl rollout restart deploy $DEPLOYMENT -n $NAMESPACE
+done
+
+echo "All deployments in the namespace $NAMESPACE have been restarted."
+```
+how to restart pod
+```bash
+#!/bin/bash
+
+# Define the namespace
+NAMESPACE="kube-system"
+
+# Get all pods in the specified namespace
+PODS=$(kubectl get pods -n $NAMESPACE -o jsonpath='{.items[*].metadata.name}')
+
+# Loop through each pod and delete it
+for POD in $PODS; do
+  echo "Deleting pod: $POD"
+  kubectl delete pod $POD -n $NAMESPACE
+done
+
+echo "All pods in the namespace $NAMESPACE have been deleted."
+```
